@@ -1,70 +1,45 @@
 import React from 'react';
 import firebase from 'firebase';
-import FirebasePage from '../components/FirebasePage';
 
-const getMessagesReference = (firebaseInstance, user) =>
-  firebaseInstance
-    .database()
-    .ref('messages')
-    .orderByChild('user')
-    .startAt(user && user.uid)
-    .endAt(user && user.uid);
+import { FirebaseManager, FirebaseComponent } from '../lib/firebase';
+import { Actions, wrapPageInRedux } from '../lib/store';
 
-export default class Index extends FirebasePage {
-  static async getInitialProps({ req }) {
+import Test from '../components/Test';
+
+class Index extends FirebaseComponent {
+  static async getInitialProps({ req, store }) {
     const user = req && req.session ? req.session.decodedToken : null;
-    const messages = req && (await getMessagesReference(req.firebaseServer, user).once('value'));
 
-    return { user, messages: req ? messages.val() : {} };
+    // Prepopulate the store for server rendering.
+    if (req && user) {
+      await store.dispatch(Actions.setUser(user));
+      await store.dispatch(Actions.loadMessagesForUser(user.uid, req.firebaseServer));
+    }
+
+    return {};
   }
 
-  constructor(props) {
-    super(props);
-
-    // Initialize state.
-    this.state = {
-      user: this.props.user,
-      messages: this.props.messages,
-      value: '',
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onFirebaseLogin = this.onFirebaseLogin.bind(this);
+  firebaseDidAuthenticate() {
+    this.props.dispatch(Actions.watchMessagesForUser(this.props.user.uid));
   }
 
-  onPartialViewmodelUpdate(partialViewModel) {
-    this.setState(partialViewModel);
-  }
-
-  onFirebaseLogin() {
-    getMessagesReference(firebase, this.state.user).on('value', async (snap) => {
-      const messages = await snap.val();
-      if (messages) this.setState({ messages });
-    });
-  }
-
-  onFirebaseLogout() {
-    firebase.database().ref('messages').off();
-    this.setState({ messages: {} });
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
+  firebaseDidDeauthenticate() {
+    this.props.dispatch(Actions.unwatchMessages());
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
+    const element = event.target.elements[0];
     const date = new Date().getTime();
 
     firebase.database().ref(`messages/${date}`).set({
       id: date,
-      text: this.state.value,
-      user: this.state.user.uid,
+      text: element.value,
+      user: this.props.user.uid,
     });
 
-    this.setState({ value: '' });
+    element.value = '';
   }
 
   removeMessage(id) {
@@ -72,19 +47,21 @@ export default class Index extends FirebasePage {
   }
 
   render() {
-    const { user, value, messages } = this.state;
+    const { user, messages, value } = this.props;
 
     return (
       <div>
         {user && <div>user: {user.uid}</div>}
+        <div>foo: {this.props.foo}</div>
+        <Test />
 
         {user
-          ? <button onClick={FirebasePage.handleLogout}>Logout</button>
-          : <button onClick={FirebasePage.handleLogin}>Login</button>}
+          ? <button onClick={FirebaseManager.handleLogout}>Logout</button>
+          : <button onClick={FirebaseManager.handleLogin}>Login</button>}
 
         {user &&
           <div>
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={e => this.handleSubmit(e)}>
               <input
                 type={'text'}
                 onChange={this.handleChange}
@@ -111,3 +88,5 @@ export default class Index extends FirebasePage {
     );
   }
 }
+
+export default wrapPageInRedux(Index);
