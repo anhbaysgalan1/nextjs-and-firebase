@@ -1,10 +1,10 @@
 import React from 'react';
-import firebase from 'firebase';
 
 import { FirebaseManager, FirebaseComponent } from '../lib/firebase';
 import { Actions, wrapPageInRedux } from '../lib/store';
 
-import Test from '../components/Test';
+import MessageQueuer from '../components/MessageQueuer';
+import MessageList from '../components/MessageList';
 
 class Index extends FirebaseComponent {
   static async getInitialProps({ req, store }) {
@@ -12,7 +12,17 @@ class Index extends FirebaseComponent {
 
     // Prepopulate the store for server rendering.
     if (req && user) {
-      await store.dispatch(Actions.setUser(user));
+      // `firebase.UserInfo` differs from decodedToken Google auth provides, so I need to map
+      // the values to the right key. I assume this would vary depending on auth provider, so
+      // that's something that might require a bit of a refactor.
+      await store.dispatch(
+        Actions.setUser({
+          ...user,
+          displayName: user.name,
+          photoUrl: user.picture,
+        })
+      );
+
       await store.dispatch(Actions.loadMessagesForUser(user.uid, req.firebaseServer));
     }
 
@@ -27,62 +37,20 @@ class Index extends FirebaseComponent {
     this.props.dispatch(Actions.unwatchMessages());
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    const element = event.target.elements[0];
-    const date = new Date().getTime();
-
-    firebase.database().ref(`messages/${date}`).set({
-      id: date,
-      text: element.value,
-      user: this.props.user.uid,
-    });
-
-    element.value = '';
-  }
-
-  removeMessage(id) {
-    firebase.database().ref(`messages/${id}`).remove();
-  }
-
   render() {
-    const { user, messages, value } = this.props;
+    const { user } = this.props;
 
     return (
       <div>
-        {user && <div>user: {user.uid}</div>}
-        <div>foo: {this.props.foo}</div>
-        <Test />
-
+        {user && <div>User: {user.displayName}</div>}
         {user
           ? <button onClick={FirebaseManager.handleLogout}>Logout</button>
           : <button onClick={FirebaseManager.handleLogin}>Login</button>}
 
         {user &&
           <div>
-            <form onSubmit={e => this.handleSubmit(e)}>
-              <input
-                type={'text'}
-                onChange={this.handleChange}
-                placeholder={'add message'}
-                value={value}
-              />
-            </form>
-            <ul>
-              {messages &&
-                Object.keys(messages).map(key =>
-                  (<div key={key}>
-                    <button
-                      onClick={() => {
-                        this.removeMessage(messages[key].id);
-                      }}
-                    >
-                      {messages[key].text}
-                    </button>
-                  </div>),
-                )}
-            </ul>
+            <MessageQueuer />
+            <MessageList />
           </div>}
       </div>
     );

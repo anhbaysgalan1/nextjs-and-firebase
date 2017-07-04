@@ -16,7 +16,7 @@ const firebase = admin.initializeApp(
     credential: admin.credential.cert(serverCredentials),
     databaseURL: 'https://nextplusfirebase.firebaseio.com',
   },
-  'server',
+  'server'
 );
 
 app.prepare().then(() => {
@@ -32,7 +32,7 @@ app.prepare().then(() => {
       rolling: true,
       httpOnly: true,
       cookie: { maxAge: 604800000 }, // week
-    }),
+    })
   );
 
   server.use((req, res, nextAction) => {
