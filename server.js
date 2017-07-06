@@ -6,6 +6,7 @@ const next = require('next');
 const admin = require('firebase-admin');
 
 const serverCredentials = require('./credentials/server');
+const twilioInterface = require('./server/twilio');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -18,6 +19,8 @@ const firebase = admin.initializeApp(
   },
   'server'
 );
+
+twilioInterface.initialize({ firebase });
 
 app.prepare().then(() => {
   const server = express();

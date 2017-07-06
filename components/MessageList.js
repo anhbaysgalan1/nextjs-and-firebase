@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Actions } from '../lib/store';
 
-const MessageList = ({ messages, user, removeMessage }) =>
+const MessageList = ({ messages, removeMessage }) =>
   (<div>
     {messages &&
       Object.keys(messages).map((key) => {
@@ -13,7 +13,7 @@ const MessageList = ({ messages, user, removeMessage }) =>
           <div key={key}>
             <button
               onClick={() => {
-                removeMessage(user.uid, message.id);
+                removeMessage(message.id);
               }}
             >
               Remove From Queue
@@ -35,9 +35,6 @@ MessageList.propTypes = {
       sendTime: PropTypes.number.isRequired,
     })
   ),
-  user: PropTypes.shape({
-    uid: PropTypes.string.isRequired,
-  }).isRequired,
   removeMessage: PropTypes.func.isRequired,
 };
 
@@ -47,13 +44,11 @@ MessageList.defaultProps = {
 
 const mapStateToProps = state => ({
   messages: state.messages,
-  user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-  // TODO: Implement
-  removeMessage: (uid, messageId) => {
-    dispatch(Actions.removeMessageForUser(uid, messageId));
+  removeMessage: (messageId) => {
+    dispatch(Actions.removeMessage(messageId));
   },
 });
 
