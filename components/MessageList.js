@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { Actions } from '../lib/store';
 
@@ -9,6 +10,16 @@ const MessageList = ({ messages, removeMessage }) =>
     {messages &&
       Object.keys(messages).map((key) => {
         const message = messages[key];
+        let sentText = '';
+
+        if (message.sent) {
+          sentText = 'Was sent';
+        } else if (moment().isBefore(message.sendTime)) {
+          sentText = 'Will be sent';
+        } else {
+          sentText = 'Should have been sent';
+        }
+
         return (
           <div key={key}>
             <button
@@ -20,7 +31,8 @@ const MessageList = ({ messages, removeMessage }) =>
             </button>
             <div>Text: {message.text}</div>
             <div>To: {message.phoneNumber}</div>
-            <div>Sending On: {`${new Date(message.sendTime)}`}</div>
+
+            <div>{sentText}: {`${moment(message.sendTime).fromNow()}`}</div>
           </div>
         );
       })}
@@ -33,6 +45,7 @@ MessageList.propTypes = {
       text: PropTypes.string.isRequired,
       phoneNumber: PropTypes.string.isRequired,
       sendTime: PropTypes.number.isRequired,
+      sent: PropTypes.bool.isRequired,
     })
   ),
   removeMessage: PropTypes.func.isRequired,
