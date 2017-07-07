@@ -26,7 +26,7 @@ const UserName = styled.div`
 const LoginStateButton = styled.button`
 `;
 
-const MessageQueuer = ({ user }) =>
+const Header = ({ user }) =>
   (<HeaderBar>
     <h1>MessageQueue</h1>
     <UserControls>
@@ -37,14 +37,14 @@ const MessageQueuer = ({ user }) =>
     </UserControls>
   </HeaderBar>);
 
-MessageQueuer.propTypes = {
+Header.propTypes = {
   user: PropTypes.shape({
     displayName: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
 };
 
 const mapStateToProps = state => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(MessageQueuer);
+export default connect(mapStateToProps)(Header);

@@ -14,7 +14,25 @@ const Page = styled.div`
 `;
 
 const Content = styled.div`
+  display: flex;
   padding: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const LoginPrompt = styled.div`
+  width: 50%;
+  background: green;
+  color: white;
+  border-radius: 24px;
+  text-align: center;
+  font-size: 3rem;
+  padding: 24px;
+
+  @media (max-width: 600px) {
+    width: auto;
+  }
 `;
 
 class Index extends FirebaseComponent {
@@ -58,6 +76,12 @@ class Index extends FirebaseComponent {
           <Content>
             <MessageQueuer />
             <MessageList />
+          </Content>}
+        {!user &&
+          <Content>
+            <LoginPrompt>
+              Hey, you should log in!
+            </LoginPrompt>
           </Content>}
       </Page>
     );

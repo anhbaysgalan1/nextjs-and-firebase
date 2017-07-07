@@ -93,10 +93,6 @@ MessageList.propTypes = {
   removeMessage: PropTypes.func.isRequired,
 };
 
-MessageList.defaultProps = {
-  messages: {},
-};
-
 const mapStateToProps = state => ({
   messages: state.messages,
 });
