@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -45,7 +46,10 @@ const MessagePreviewText = styled.p`
 `;
 
 const handleSubmit = (addMessageToQueue, user, draftMessage) => {
-  const sendTime = new Date(`${draftMessage.date} ${draftMessage.time}`).getTime();
+  const sendTime = moment(
+    `${draftMessage.date} ${draftMessage.time}`,
+    'YYYY-MM-DD HH:mm'
+  ).valueOf();
 
   if (sendTime < new Date()) {
     // TODO: Trigger error state

@@ -42,6 +42,7 @@ const Information = styled.div`
 const MessageList = ({ messages, removeMessage }) => {
   const messageKeys = Object.keys(messages);
 
+  // TODO(Bug): This appears to be backwards in Safari.
   messageKeys.sort((a, b) => messages[a].sendTime < messages[b].sendTime);
 
   return (
