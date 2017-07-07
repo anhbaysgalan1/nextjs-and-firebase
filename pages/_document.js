@@ -11,6 +11,11 @@ export default class MyDocument extends Document {
       <html lang="en">
         <Head>
           {styleTags}
+          <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+            rel="stylesheet"
+          />
+          <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" />
         </Head>
         <body>
           <div className="root">

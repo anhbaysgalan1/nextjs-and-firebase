@@ -12,6 +12,16 @@ const Title = styled.h1`
   font-size: 2rem;
 `;
 
+const MessageFormLabel = styled.label`
+  display: flex;
+`;
+
+const MessageFormInput = styled.input`
+  width: 100%;
+  text-align: left;
+  font-size: 1.5rem;
+`;
+
 const handleSubmit = (addMessageToQueue, user, draftMessage) => {
   const sendTime = new Date(`${draftMessage.date} ${draftMessage.time}`).getTime();
 
@@ -43,10 +53,10 @@ const MessageQueuer = ({ addMessageToQueue, user, draftMessage, updateDraftMessa
         handleSubmit(addMessageToQueue, user, draftMessage);
       }}
     >
-      <label htmlFor="draft-date">
+      <MessageFormLabel htmlFor="draft-date">
         Date to send message:
-      </label>
-      <input
+      </MessageFormLabel>
+      <MessageFormInput
         required
         type="date"
         id="draft-date"
@@ -56,10 +66,10 @@ const MessageQueuer = ({ addMessageToQueue, user, draftMessage, updateDraftMessa
         }}
       />
 
-      <label htmlFor="draft-time">
+      <MessageFormLabel htmlFor="draft-time">
         Time to send message:
-      </label>
-      <input
+      </MessageFormLabel>
+      <MessageFormInput
         required
         type="time"
         id="draft-time"
@@ -69,10 +79,10 @@ const MessageQueuer = ({ addMessageToQueue, user, draftMessage, updateDraftMessa
         }}
       />
 
-      <label htmlFor="draft-phone-number">
+      <MessageFormLabel htmlFor="draft-phone-number">
         Phone number (ex. 4155555555):
-      </label>
-      <input
+      </MessageFormLabel>
+      <MessageFormInput
         required
         type="tel"
         id="draft-phone-number"
@@ -83,10 +93,10 @@ const MessageQueuer = ({ addMessageToQueue, user, draftMessage, updateDraftMessa
         }}
       />
 
-      <label htmlFor="draft-message">
+      <MessageFormLabel htmlFor="draft-message">
         Message text:
-      </label>
-      <input
+      </MessageFormLabel>
+      <MessageFormInput
         required
         type="text"
         id="draft-message"
@@ -104,7 +114,7 @@ const MessageQueuer = ({ addMessageToQueue, user, draftMessage, updateDraftMessa
         }}
       />
 
-      <input type="submit" value="Submit" />
+      <MessageFormInput type="submit" value="Submit" />
     </form>
 
     {draftMessage.message &&

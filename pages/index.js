@@ -1,10 +1,21 @@
 import React from 'react';
+import styled from 'styled-components';
 
-import { FirebaseManager, FirebaseComponent } from '../lib/firebase';
+import { FirebaseComponent } from '../lib/firebase';
 import { Actions, wrapPageInRedux } from '../lib/store';
 
+import Header from '../components/Header';
 import MessageQueuer from '../components/MessageQueuer';
 import MessageList from '../components/MessageList';
+
+// Base styles.
+const Page = styled.div`
+  font-family: 'PT Sans', sans-serif;
+`;
+
+const Content = styled.div`
+  padding: 16px;
+`;
 
 class Index extends FirebaseComponent {
   static async getInitialProps({ req, store }) {
@@ -41,18 +52,14 @@ class Index extends FirebaseComponent {
     const { user } = this.props;
 
     return (
-      <div>
-        {user && <div>User: {user.displayName}</div>}
-        {user
-          ? <button onClick={FirebaseManager.handleLogout}>Logout</button>
-          : <button onClick={FirebaseManager.handleLogin}>Login</button>}
-
+      <Page>
+        <Header />
         {user &&
-          <div>
+          <Content>
             <MessageQueuer />
             <MessageList />
-          </div>}
-      </div>
+          </Content>}
+      </Page>
     );
   }
 }
