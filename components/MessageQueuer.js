@@ -68,7 +68,7 @@ export class MessageQueuer extends Component {
   componentDidMount() {
     const { updateDraftMessage } = this.props;
 
-    // You could do this on the server for pre-rendering, but
+    // You could do this on the server (in the default store) for pre-rendering, but
     // it'd render the server's timezone (typically UTC).
     updateDraftMessage({
       date: moment().format('YYYY-MM-DD'),
