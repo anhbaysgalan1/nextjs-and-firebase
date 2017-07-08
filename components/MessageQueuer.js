@@ -51,11 +51,6 @@ const handleSubmit = (addMessageToQueue, user, draftMessage) => {
     'YYYY-MM-DD HH:mm'
   ).valueOf();
 
-  if (sendTime < new Date()) {
-    // TODO: Trigger error state
-    return;
-  }
-
   addMessageToQueue({
     text: draftMessage.composedMessage,
     user,

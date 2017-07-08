@@ -5,6 +5,7 @@ import { FirebaseComponent } from '../lib/firebase';
 import { Actions, wrapPageInRedux } from '../lib/store';
 
 import Header from '../components/Header';
+import Warnings from '../components/Warnings';
 import MessageQueuer from '../components/MessageQueuer';
 import MessageList from '../components/MessageList';
 
@@ -74,6 +75,7 @@ class Index extends FirebaseComponent {
         <Header />
         {user &&
           <Content>
+            <Warnings />
             <MessageQueuer />
             <MessageList />
           </Content>}
