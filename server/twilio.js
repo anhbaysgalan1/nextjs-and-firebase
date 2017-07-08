@@ -1,8 +1,8 @@
 const Twilio = require('twilio');
 const moment = require('moment');
-const { accountSid, authToken, twilioPhoneNumber } = require('../credentials/twilio');
+const twilioConfig = require('../credentials/twilio');
 
-const twilioClient = new Twilio(accountSid, authToken);
+const twilioClient = new Twilio(twilioConfig.accountSid, twilioConfig.authToken);
 
 class TwilioInterface {
   initialize({ firebase }) {

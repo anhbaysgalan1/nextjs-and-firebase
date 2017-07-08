@@ -1,4 +1,5 @@
 node_modules
-credentials
 .git
 .next
+.env
+npm-debug.log
