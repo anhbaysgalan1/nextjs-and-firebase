@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -64,89 +64,107 @@ const handleSubmit = (addMessageToQueue, user, draftMessage) => {
   }
 };
 
-const MessageQueuer = ({ addMessageToQueue, user, draftMessage, updateDraftMessage }) =>
-  (<MessageForm
-    name="queue_form"
-    onSubmit={(e) => {
-      e.preventDefault();
-      handleSubmit(addMessageToQueue, user, draftMessage);
-    }}
-  >
-    <Title>Queue a Message</Title>
-    <MessageFormLabel htmlFor="draft-date">
-      Date to send message:
-    </MessageFormLabel>
-    <MessageFormInput
-      required
-      type="date"
-      id="draft-date"
-      value={draftMessage.date}
-      onChange={(e) => {
-        updateDraftMessage({ date: e.target.value });
-      }}
-    />
+export class MessageQueuer extends Component {
+  componentDidMount() {
+    const { updateDraftMessage } = this.props;
 
-    <MessageFormLabel htmlFor="draft-time">
-      Time to send message:
-    </MessageFormLabel>
-    <MessageFormInput
-      required
-      type="time"
-      id="draft-time"
-      value={draftMessage.time}
-      onChange={(e) => {
-        updateDraftMessage({ time: e.target.value });
-      }}
-    />
+    // You could do this on the server for pre-rendering, but
+    // it'd render the server's timezone (typically UTC).
+    updateDraftMessage({
+      date: moment().format('YYYY-MM-DD'),
+      time: moment().add(5, 'minutes').format('HH:mm'),
+    });
+  }
 
-    <MessageFormLabel htmlFor="draft-phone-number">
-      Phone number (ex. 4155555555):
-    </MessageFormLabel>
-    <MessageFormInput
-      required
-      type="tel"
-      id="draft-phone-number"
-      value={draftMessage.phoneNumber}
-      pattern="^\d{10}$"
-      onChange={(e) => {
-        updateDraftMessage({ phoneNumber: e.target.value });
-      }}
-    />
+  render() {
+    const { addMessageToQueue, user, draftMessage, updateDraftMessage } = this.props;
+    return (
+      <MessageForm
+        name="queue_form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(addMessageToQueue, user, draftMessage);
+        }}
+      >
+        <Title>Queue a Message</Title>
+        <MessageFormLabel htmlFor="draft-date">
+          Date to send message:
+        </MessageFormLabel>
+        <MessageFormInput
+          required
+          type="date"
+          id="draft-date"
+          value={draftMessage.date}
+          onChange={(e) => {
+            updateDraftMessage({ date: e.target.value });
+          }}
+        />
 
-    <MessageFormLabel htmlFor="draft-message">
-      Message text:
-    </MessageFormLabel>
-    <MessageFormInput
-      required
-      type="text"
-      id="draft-message"
-      value={draftMessage.message}
-      maxLength={
-        draftMessage.message
-          ? SMS_MAX_LENGTH - (draftMessage.composedMessage.length - draftMessage.message.length)
-          : SMS_MAX_LENGTH
-      }
-      onChange={(e) => {
-        updateDraftMessage({
-          message: e.target.value,
-          composedMessage: `${e.target.value} [From ${user.displayName}]`,
-        });
-      }}
-    />
+        <MessageFormLabel htmlFor="draft-time">
+          Time to send message:
+        </MessageFormLabel>
+        <MessageFormInput
+          required
+          type="time"
+          id="draft-time"
+          value={draftMessage.time}
+          onChange={(e) => {
+            updateDraftMessage({ time: e.target.value });
+          }}
+        />
 
-    <MessageFormInput type="submit" value="Submit" />
+        <MessageFormLabel htmlFor="draft-phone-number">
+          Phone number (ex. 4155555555):
+        </MessageFormLabel>
+        <MessageFormInput
+          required
+          type="tel"
+          id="draft-phone-number"
+          value={draftMessage.phoneNumber}
+          pattern="^\d{10}$"
+          onChange={(e) => {
+            updateDraftMessage({ phoneNumber: e.target.value });
+          }}
+        />
 
-    {draftMessage.message &&
-      <MessagePreview>
-        <MessagePreviewTitle>Preview</MessagePreviewTitle>
-        <MessagePreviewText>
-          {`"${draftMessage.composedMessage}"`}
-        </MessagePreviewText>
-        <p>
-          [{draftMessage.composedMessage && draftMessage.composedMessage.length}/{SMS_MAX_LENGTH}]
-        </p>
-      </MessagePreview>}
-  </MessageForm>);
+        <MessageFormLabel htmlFor="draft-message">
+          Message text:
+        </MessageFormLabel>
+        <MessageFormInput
+          required
+          type="text"
+          id="draft-message"
+          value={draftMessage.message}
+          maxLength={
+            draftMessage.message
+              ? SMS_MAX_LENGTH - (draftMessage.composedMessage.length - draftMessage.message.length)
+              : SMS_MAX_LENGTH
+          }
+          onChange={(e) => {
+            updateDraftMessage({
+              message: e.target.value,
+              composedMessage: `${e.target.value} [From ${user.displayName}]`,
+            });
+          }}
+        />
+
+        <MessageFormInput type="submit" value="Submit" />
+
+        {draftMessage.message &&
+          <MessagePreview>
+            <MessagePreviewTitle>Preview</MessagePreviewTitle>
+            <MessagePreviewText>
+              {`"${draftMessage.composedMessage}"`}
+            </MessagePreviewText>
+            {draftMessage.composedMessage &&
+              <p>
+                [{draftMessage.composedMessage.length}/{SMS_MAX_LENGTH}]
+              </p>}
+          </MessagePreview>}
+      </MessageForm>
+    );
+  }
+}
 
 MessageQueuer.propTypes = {
   addMessageToQueue: PropTypes.func.isRequired,
