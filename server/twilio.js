@@ -53,7 +53,7 @@ class TwilioInterface {
               .create({
                 body: sendingData.text,
                 to: `+1${sendingData.phoneNumber}`,
-                from: twilioPhoneNumber,
+                from: twilioConfig.twilioPhoneNumber,
               })
               .then(() => {
                 // Done! Mark as sent.

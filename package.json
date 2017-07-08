@@ -2,6 +2,7 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
+    "postinstall": "yarn run build",
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {

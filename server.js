@@ -30,7 +30,7 @@ app.prepare().then(() => {
     session({
       secret: 'next-firebase-demo',
       saveUninitialized: true,
-      store: new FileStore({ path: '/tmp/sessions', secret: 'next-firebase-demo' }),
+      store: new FileStore({ path: './tmp/sessions', secret: 'next-firebase-demo' }),
       resave: false,
       rolling: true,
       httpOnly: true,
