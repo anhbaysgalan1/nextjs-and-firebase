@@ -2,48 +2,21 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 
 import { Actions } from '../lib/store';
 
+import {
+  GenericButton,
+  SectionTitle,
+  MessageForm,
+  MessageFormLabel,
+  MessageFormInput,
+  MessagePreview,
+  MessagePreviewTitle,
+  MessagePreviewText,
+} from '../styles/components';
+
 const SMS_MAX_LENGTH = 160;
-
-const Title = styled.h1`
-  color: red;
-  font-size: 2rem;
-`;
-
-const MessageForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const MessageFormLabel = styled.label`
-  display: flex;
-`;
-
-const MessageFormInput = styled.input`
-  text-align: left;
-  font-size: 1.5rem;
-`;
-
-const MessagePreview = styled.div`
-  padding: 16px 12px;
-  margin: 12px 0;
-  background: lightgreen;
-  border-radius: 8px;
-  text-align: center;
-`;
-
-const MessagePreviewTitle = styled.h2`
-  font-size: 1.25rem;
-  margin-bottom: 8px;
-`;
-
-const MessagePreviewText = styled.p`
-  margin-bottom: 8px;
-`;
 
 const handleSubmit = (addMessageToQueue, user, draftMessage) => {
   const sendTime = moment(
@@ -64,7 +37,7 @@ const handleSubmit = (addMessageToQueue, user, draftMessage) => {
   }
 };
 
-export class MessageQueuer extends Component {
+class MessageQueuer extends Component {
   componentDidMount() {
     const { updateDraftMessage } = this.props;
 
@@ -86,7 +59,7 @@ export class MessageQueuer extends Component {
           handleSubmit(addMessageToQueue, user, draftMessage);
         }}
       >
-        <Title>Queue a Message</Title>
+        <SectionTitle>Queue a Message</SectionTitle>
         <MessageFormLabel htmlFor="draft-date">
           Date to send message:
         </MessageFormLabel>
@@ -148,8 +121,6 @@ export class MessageQueuer extends Component {
           }}
         />
 
-        <MessageFormInput type="submit" value="Submit" />
-
         {draftMessage.message &&
           <MessagePreview>
             <MessagePreviewTitle>Preview</MessagePreviewTitle>
@@ -161,6 +132,8 @@ export class MessageQueuer extends Component {
                 [{draftMessage.composedMessage.length}/{SMS_MAX_LENGTH}]
               </p>}
           </MessagePreview>}
+
+        <GenericButton type="submit">Submit</GenericButton>
       </MessageForm>
     );
   }

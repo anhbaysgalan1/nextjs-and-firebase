@@ -1,40 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
 
 import { FirebaseComponent } from '../lib/firebase';
 import { Actions, wrapPageInRedux } from '../lib/store';
 
+import { Content, LoginPrompt } from '../styles/components';
 import Header from '../components/Header';
 import Warnings from '../components/Warnings';
 import MessageQueuer from '../components/MessageQueuer';
 import MessageList from '../components/MessageList';
-
-// Base styles.
-const Page = styled.div`
-  font-family: 'PT Sans', sans-serif;
-`;
-
-const Content = styled.div`
-  display: flex;
-  padding: 16px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const LoginPrompt = styled.div`
-  width: 50%;
-  background: green;
-  color: white;
-  border-radius: 24px;
-  text-align: center;
-  font-size: 3rem;
-  padding: 24px;
-
-  @media (max-width: 600px) {
-    width: auto;
-  }
-`;
 
 class Index extends FirebaseComponent {
   static async getInitialProps({ req, store }) {
@@ -71,7 +44,7 @@ class Index extends FirebaseComponent {
     const { user } = this.props;
 
     return (
-      <Page>
+      <div>
         <Header />
         {user &&
           <Content>
@@ -85,7 +58,7 @@ class Index extends FirebaseComponent {
               Hey, you should log in!
             </LoginPrompt>
           </Content>}
-      </Page>
+      </div>
     );
   }
 }

@@ -1,30 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 
 import { FirebaseManager } from '../lib/firebase';
-
-const HeaderBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  background: green;
-  color: white;
-  padding: 16px;
-`;
-
-const UserControls = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const UserName = styled.div`
-  margin-right: 8px;
-`;
-
-const LoginStateButton = styled.button`
-`;
+import { HeaderBar, UserControls, UserName, GenericButton } from '../styles/components';
 
 const Header = ({ user }) =>
   (<HeaderBar>
@@ -32,8 +11,8 @@ const Header = ({ user }) =>
     <UserControls>
       {user && <UserName>User: {user.displayName}</UserName>}
       {user
-        ? <LoginStateButton onClick={FirebaseManager.handleLogout}>Logout</LoginStateButton>
-        : <LoginStateButton onClick={FirebaseManager.handleLogin}>Login</LoginStateButton>}
+        ? <GenericButton onClick={FirebaseManager.handleLogout}>Logout</GenericButton>
+        : <GenericButton onClick={FirebaseManager.handleLogin}>Login</GenericButton>}
     </UserControls>
   </HeaderBar>);
 
