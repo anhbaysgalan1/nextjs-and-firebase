@@ -9,4 +9,6 @@ export const COLORS = {
   SUCCESS: '#678D58',
 };
 
-export const SPACING = {};
+export const MEASUREMENTS = {
+  BASE_UNIT: 5,
+};

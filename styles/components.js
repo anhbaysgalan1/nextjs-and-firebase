@@ -1,6 +1,7 @@
 import styled, { injectGlobal } from 'styled-components';
 
 import { COLORS } from './variables';
+import { baseUnits } from './methods';
 
 export const EXPLICIT_GLOBALS = injectGlobal`
   body {
@@ -11,7 +12,7 @@ export const EXPLICIT_GLOBALS = injectGlobal`
 
 export const Content = styled.div`
   display: flex;
-  padding: 16px;
+  padding: ${baseUnits(4)};
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -20,18 +21,18 @@ export const Content = styled.div`
 export const SectionTitle = styled.h2`
   color: ${COLORS.DARK};
   font-size: 1.5rem;
-  margin-bottom: 8px;
+  margin-bottom: ${baseUnits(2)};
 `;
 
 export const LoginPrompt = styled.div`
   width: 50%;
   background: ${COLORS.SECONDARY};
   color: ${COLORS.WHITE};
-  border-radius: 24px;
+  border-radius: ${baseUnits(6)};
   text-align: center;
   font-size: 3rem;
-  margin-top: 12px;
-  padding: 24px;
+  margin-top: ${baseUnits(3)};
+  padding: ${baseUnits(6)};
 
   @media (max-width: 600px) {
     width: auto;
@@ -41,9 +42,9 @@ export const LoginPrompt = styled.div`
 export const GenericButton = styled.button`
   padding: .5rem 1rem;
   color: ${COLORS.WHITE};
-  border: 4px solid ${COLORS.SECONDARY};
+  border: ${baseUnits(1)} solid ${COLORS.SECONDARY};
   border-width: ${props => props.squared && '0px'};
-  border-radius: 4px;
+  border-radius: ${baseUnits(1)};
   border-radius: ${props => props.squared && '0px'};
   background: ${COLORS.SECONDARY};
   transition: all 350ms;
@@ -57,7 +58,10 @@ export const GenericButton = styled.button`
   }
 `;
 
-export const WarningButton = GenericButton.extend`
+// TODO: Would ideally use `GenericButton.extend` but that creates
+// issues with react SSR/CSR hash matching (on dev builds). See:
+// https://github.com/styled-components/babel-plugin-styled-components/issues/52
+export const WarningButton = styled(GenericButton)`
   &:hover,
   &:focus {
     background: ${COLORS.WARNING};
@@ -72,7 +76,7 @@ export const HeaderBar = styled.div`
   flex-wrap: wrap;
   background: ${COLORS.PRIMARY};
   color: ${COLORS.LIGHT};
-  padding: 16px;
+  padding: ${baseUnits(4)};
 `;
 
 export const UserControls = styled.div`
@@ -82,7 +86,7 @@ export const UserControls = styled.div`
 `;
 
 export const UserName = styled.div`
-  margin-right: 8px;
+  margin-right: ${baseUnits(2)};
 `;
 
 export const LoginStateButton = styled.button`
@@ -92,8 +96,8 @@ export const MessageForm = styled.form`
   display: flex;
   width: 60%;
   flex-direction: column;
-  margin-bottom: 16px;
-  padding: 16px;
+  margin-bottom: ${baseUnits(4)};
+  padding: ${baseUnits(4)};
   background: ${COLORS.WHITE};
 
   @media (max-width: 600px) {
@@ -103,35 +107,35 @@ export const MessageForm = styled.form`
 
 export const MessageFormLabel = styled.label`
   background: ${COLORS.SECONDARY};
-  padding: 4px 8px;
+  padding: 4px ${baseUnits(2)};
 `;
 
 export const MessageFormInput = styled.input`
   text-align: left;
   background: ${COLORS.LIGHT};
   border: 0 solid ${COLORS.PRIMARY};
-  margin-bottom: 8px;
+  margin-bottom: ${baseUnits(2)};
   font-size: 1rem;
   width: calc(100% - 1rem);
   padding: .5rem;
 `;
 
 export const MessagePreview = styled.div`
-  padding: 16px 12px;
-  margin: 8px 0 16px;
+  padding: ${baseUnits(4)} ${baseUnits(3)};
+  margin: ${baseUnits(2)} 0 ${baseUnits(4)};
   background: ${COLORS.LIGHT};
-  border-radius: 8px;
+  border-radius: ${baseUnits(2)};
   text-align: center;
 `;
 
 export const MessagePreviewTitle = styled.h2`
   font-size: 1.5rem;
-  margin-bottom: 8px;
+  margin-bottom: ${baseUnits(2)};
   color: ${COLORS.PRIMARY}
 `;
 
 export const MessagePreviewText = styled.p`
-  margin-bottom: 8px;
+  margin-bottom: ${baseUnits(2)};
   word-wrap: break-word;
 `;
 
@@ -142,7 +146,7 @@ export const QueuedMessageList = styled.div`
 export const QueuedMessage = styled.div`
   display: flex;
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: ${baseUnits(2)};
   background: ${COLORS.CAUTION};
   background: ${props => props.sending && COLORS.WARNING};
   background: ${props => props.sent && COLORS.SUCCESS};
@@ -158,7 +162,7 @@ export const MessageInformation = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   flex: 1;
-  padding: 8px 8px 0;
+  padding: ${baseUnits(2)} ${baseUnits(2)} 0;
 `;
 
 export const QueuedMessageText = styled.div`
@@ -166,15 +170,15 @@ export const QueuedMessageText = styled.div`
   flex-basis: fill;
   flex: 1;
   flex-basis: 100%;
-  padding: 8px;
-  margin-bottom: 8px;
-  border-radius: 8px;
+  padding: ${baseUnits(2)};
+  margin-bottom: ${baseUnits(2)};
+  border-radius: ${baseUnits(2)};
   text-align: center;
 `;
 
 export const QueuedMessageCaption = styled.div`
   color: ${COLORS.LIGHT};
-  margin-bottom: 8px;
+  margin-bottom: ${baseUnits(2)};
 `;
 
 export const WarningsContainer = styled.div`
@@ -183,7 +187,7 @@ export const WarningsContainer = styled.div`
   flex-wrap: wrap;
   background: ${COLORS.WARNING};
   color: ${COLORS.WHITE};
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: ${baseUnits(4)};
+  margin-bottom: ${baseUnits(4)};
   text-align: center;
 `;
