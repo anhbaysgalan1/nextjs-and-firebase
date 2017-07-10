@@ -35,20 +35,19 @@ class TwilioInterface {
       this.firebase.database().ref(`messages/${key}`).transaction(
         (currentData) => {
           // First, set sending property to true to lock the record.
-          if (currentData.sending === false) {
+          if (currentData === null || (currentData && currentData.sending === false)) {
             return Object.assign({}, currentData, { sending: true });
           }
-          // Must return undefined to abort the transaction.
           return undefined;
         },
         (error, committed, snapshot) => {
-          const sendingData = snapshot.val();
-          const messageRef = this.firebase.database().ref(`messages/${sendingData.id}`);
-
           // This logic means that *this* transaction was the one that actually locked
           // the message. If we were to horizontally scale this app, this would prevent
           // multiple instances from attempting to send the same message.
           if (!error && committed) {
+            const sendingData = snapshot.val();
+            const messageRef = this.firebase.database().ref(`messages/${sendingData.id}`);
+
             twilioClient.messages
               .create({
                 body: sendingData.text,
